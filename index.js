@@ -391,8 +391,10 @@ form.addEventListener('submit', function(e) {
   };
 
   // Store the user data in local storage
-  localStorage.setItem('user', JSON.stringify(user));
-  
+   let user_serialised = JSON.stringify(user);
+   localStorage.setItem('user', user_serialised)
+   let user_deserialised = JSON.parse(localStorage.getItem('user'))
+  console.log(user_deserialised)
   // Clear the form inputs
   document.getElementById('name').value = '';
   document.getElementById('email').value = '';
