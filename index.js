@@ -383,23 +383,57 @@ form.addEventListener('submit', function(e) {
   e.preventDefault(); // Prevent form submission
   const name = document.getElementById('name').value;
   const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
 
   // Create an object to hold the user data
   const user = {
     name,
-    email
+    email,
+    phone
   };
 
-  // Store the user data in local storage
-   let user_serialised = JSON.stringify(user);
-   localStorage.setItem('user', user_serialised)
-   let user_deserialised = JSON.parse(localStorage.getItem('user'))
-  console.log(user_deserialised)
+  // Retrieve the existing array of users from local storage
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+
+  // Add the new user to the array
+  users.push(user);
+
+  // Store the updated array of users back to local storage
+  localStorage.setItem('users', JSON.stringify(users));
+  
+
   // Clear the form inputs
   document.getElementById('name').value = '';
   document.getElementById('email').value = '';
+  document.getElementById('phone').value = '';
 
   // Display a message to the user
   const msg = document.querySelector('.msg');
   msg.innerHTML = 'User data saved to local storage';
-})
+
+  // Get the user list element
+  const userList = document.getElementById('user-list');
+
+  // Remove any existing list items
+  while (userList.firstChild) {
+    userList.removeChild(userList.firstChild);
+  }
+
+  // Retrieve the updated array of users from local storage
+  users = JSON.parse(localStorage.getItem('users')) || [];
+
+  // Loop through the array of users and create a bullet-point list item for each user
+  users.forEach(function(user) {
+    // Create a list item element
+    const li = document.createElement('li');
+
+    // Create a text node with the user's name, email, and phone
+    const text = document.createTextNode(`${user.name}, ${user.email}, ${user.phone}`);
+
+    // Append the text node to the list item element
+    li.appendChild(text);
+
+    // Append the list item element to the user list element
+    userList.appendChild(li);
+  });
+});
